@@ -2,38 +2,38 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 
-// Crear una aplicación Express
+// Create an Express application
 const app = express();
 
-// Servidor HTTP
+// HTTP server
 const server = http.createServer(app);
 
-// Configurar Socket.IO
+// Configure Socket.IO
 const io = new Server(server);
 
-// Rutas del servidor
+// Server routes
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-// Escuchar eventos de conexión
+// Listen for connection events
 io.on("connection", (socket) => {
-  console.log("Usuario conectado");
+  console.log("User connected");
 
-  // Escuchar un mensaje del cliente
+  // Listen for a message from the client
   socket.on("chat message", (msg) => {
-    console.log("Mensaje recibido: " + msg);
-    io.emit("chat message", msg); // Enviar mensaje a todos los clientes
+    console.log("Message received: " + msg);
+    io.emit("chat message", msg); // Send message to all clients
   });
 
-  // Manejar la desconexión del usuario
+  // Handle user disconnection
   socket.on("disconnect", () => {
-    console.log("Usuario desconectado");
+    console.log("User disconnected");
   });
 });
 
-// Iniciar el servidor
+// Start the server
 const PORT = 3000;
 server.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
